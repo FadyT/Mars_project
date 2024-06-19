@@ -44,7 +44,7 @@ function updateUI (url , details , UpdateImage , UpdateDetails){
 }
 
     let RoverDataUpdater = async function GetOpportunityData (roverName){
-        const response = await fetch('https://api.nasa.gov/mars-photos/api/v1/rovers/'+roverName+'/photos?sol=1&api_key=DKBnuj7smJIMm8dLpP0eJ0Kv7zfupNadB9XdNuUG');
+        const response = await fetch("https://api.nasa.gov/mars-photos/api/v1/rovers/" + roverName+ "/photos?sol=1000&page=0&api_key=DKBnuj7smJIMm8dLpP0eJ0Kv7zfupNadB9XdNuUG")
         const data = await response.json();
         latestJsonRes = data
         const immutableObj = Immutable.fromJS(data.photos);
@@ -100,13 +100,6 @@ function updateUI (url , details , UpdateImage , UpdateDetails){
         */
     }
 
-    async function GetSpiritData (){
-        const response = await fetch('https://api.nasa.gov/mars-photos/api/v1/rovers/Spirit/photos?sol=1&api_key=DKBnuj7smJIMm8dLpP0eJ0Kv7zfupNadB9XdNuUG');
-        const data = await response.json();
-        latestJsonRes = data
-        return data
-
-    }
             
 // add our markup to the page
 const root = document.getElementById('root')
