@@ -1,9 +1,40 @@
+
 let store = {
-    user: { name: "Student" },
+    user: { name: "Fady" },
     apod: '',
     rovers: ['Curiosity', 'Opportunity', 'Spirit'],
 }
 
+let data 
+
+/////////////////////
+// get rovers data //
+/////////////////////
+//https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/latest_photos?api_key=DKBnuj7smJIMm8dLpP0eJ0Kv7zfupNadB9XdNuUG
+//XjrEKxCjucob6GLqGj9Y0zVdqsQgiukRatzrJVAW
+    async function GetCuriostyData (){
+        const response = await fetch('https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1&api_key=DKBnuj7smJIMm8dLpP0eJ0Kv7zfupNadB9XdNuUG');
+        const data = await response.json();
+        console.log(data);
+        return data
+    }
+
+    async function GetOpportunityData (){
+        const response = await fetch('https://api.nasa.gov/mars-photos/api/v1/rovers/Opportunity/photos?sol=1&api_key=DKBnuj7smJIMm8dLpP0eJ0Kv7zfupNadB9XdNuUG');
+        const data = await response.json();
+        console.log(data);
+        return data
+
+    }
+
+    async function GetSpiritData (){
+        const response = await fetch('https://api.nasa.gov/mars-photos/api/v1/rovers/Spirit/photos?sol=1&api_key=DKBnuj7smJIMm8dLpP0eJ0Kv7zfupNadB9XdNuUG');
+        const data = await response.json();
+        console.log(data);
+        return data
+
+    }
+            
 // add our markup to the page
 const root = document.getElementById('root')
 
@@ -16,6 +47,9 @@ const render = async (root, state) => {
     root.innerHTML = App(state)
 }
 
+function print (){
+    console.log("Clicked !")
+}
 
 // create content
 const App = (state) => {
@@ -24,6 +58,8 @@ const App = (state) => {
     return `
         <header></header>
         <main>
+            ${data = GetCuriostyData()}
+            ${createBtn("print()")}
             ${Greeting(store.user.name)}
             <section>
                 <h3>Put things on the page!</h3>
@@ -63,6 +99,14 @@ const Greeting = (name) => {
     `
 }
 
+
+function createBtn (func) {
+    
+    return `
+        <button type="button" onclick="${func}">Click Me!</button>
+    `
+}
+
 // Example of a pure function that renders infomation requested from the backend
 const ImageOfTheDay = (apod) => {
 
@@ -79,14 +123,14 @@ const ImageOfTheDay = (apod) => {
     // check if the photo of the day is actually type video!
     if (apod.media_type === "video") {
         return (`
-            <p>See today's featured video <a href="${apod.url}">here</a></p>
-            <p>${apod.title}</p>
-            <p>${apod.explanation}</p>
+            <p>See today's featured video <a href="${apod && apod.url}">here</a></p>
+            <p>${apod && apod.title}</p>
+            <p>${apod && apod.explanation}</p>
         `)
     } else {
         return (`
-            <img src="${apod.image.url}" height="350px" width="100%" />
-            <p>${apod.image.explanation}</p>
+            <img src="${apod && apod.image.url}" height="350px" width="100%" />
+            <p>${apod && apod.image.explanation}</p>
         `)
     }
 }
@@ -100,6 +144,5 @@ const getImageOfTheDay = (state) => {
     fetch(`http://localhost:3000/apod`)
         .then(res => res.json())
         .then(apod => updateStore(store, { apod }))
-
-    return data
+        
 }
